@@ -33,7 +33,7 @@ const Background = (props) => {
           </div>
           <img
             alt="This will have college"
-            src="https://cbit.ac.in/wp-content/uploads/2019/01/CBIT.jpg"
+            src="https://img.jagranjosh.com/images/2022/December/21122022/Government-College-of-Technology-GCT-Coimbatore-Campus-View-2.jpg"
             className="home-details-image"
           />
         </div>

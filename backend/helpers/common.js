@@ -50,13 +50,18 @@ const getComplaint = async (id, req_status = null) => {
 };
 
 const transformFeedback = async feedback => {
+  // Handle null feedback (no feedback found)
+  if (!feedback) {
+    return null;
+  }
+  const complaint = await getComplaint(feedback._doc.complaint);
   return {
     ...feedback._doc,
     _id: feedback.id,
     createdAt: dateToString(feedback._doc.createdAt),
     updatedAt: dateToString(feedback._doc.updatedAt),
-    feedbacker: user.bind(this, feedback._doc.feedbacker),
-    feedback_complaint: transformComplaint.bind(this, await getComplaint(feedback._doc.complaint))
+    feedbacker: await user(feedback._doc.feedbacker),
+    feedback_complaint: transformComplaint(complaint)
   };
 };
 

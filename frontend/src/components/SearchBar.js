@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -44,6 +45,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchBar = () => {
+  const [value, setValue] = useState("");
+  const navigate = useNavigate();
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      const q = value.trim();
+      // navigate to complaints route with search query param
+      navigate(`/complaints${q ? `?search=${encodeURIComponent(q)}` : ""}`);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Search>
@@ -51,6 +63,9 @@ const SearchBar = () => {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Search For Complaint category…"
           inputProps={{ "aria-label": "search" }}
         />

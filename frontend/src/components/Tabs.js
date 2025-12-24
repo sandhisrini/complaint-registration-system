@@ -1,28 +1,24 @@
 import React, { useContext } from "react";
 import Box from "@mui/material/Box";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { makeStyles } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../App";
 
-const useStyles = makeStyles((theme) => ({
-  noTransform: {
-    textTransform: "none !important",
-  },
+const StyledButton = styled(Button)(({ theme }) => ({
+  textTransform: "none !important",
 }));
 
 const Tabs = () => {
-  const classes = useStyles();
   const authContext = useContext(AuthContext);
 
   return (
-    <Box sx={{ flexGrow: 1, display: { md: "flex" }, marginLeft: "100px", justifyContent: "flex-end", marginRight: '8px' }}>
+    <Box sx={{ display: { md: "flex" }, marginLeft: 'auto', justifyContent: "flex-end", marginRight: '8px' }}>
       <Stack spacing={1} direction="row">
         {authContext.role === "student" && (
-          <Button
+          <StyledButton
             variant="outlined"
-            className={classes.noTransform}
             color="inherit"
           >
             <Link
@@ -31,12 +27,11 @@ const Tabs = () => {
             >
               All Active Complaints
             </Link>
-          </Button>
+          </StyledButton>
         )}
         {authContext.role === "student" && (
-          <Button
+          <StyledButton
             variant="outlined"
-            className={classes.noTransform}
             color="inherit"
           >
             <Link
@@ -45,12 +40,11 @@ const Tabs = () => {
             >
               My Complaints
             </Link>
-          </Button>
+          </StyledButton>
         )}
         {authContext.role === "student" && (
-          <Button
+          <StyledButton
             variant="outlined"
-            className={classes.noTransform}
             color="inherit"
           >
             <Link
@@ -59,12 +53,11 @@ const Tabs = () => {
             >
               Create Complaint
             </Link>
-          </Button>
+          </StyledButton>
         )}
         {authContext.role === "student" && (
-          <Button
+          <StyledButton
             variant="outlined"
-            className={classes.noTransform}
             color="inherit"
           >
             <Link
@@ -73,12 +66,11 @@ const Tabs = () => {
             >
               Give FeedBack
             </Link>
-          </Button>
+          </StyledButton>
         )}
         {authContext.role === "dean" && (
-          <Button
+          <StyledButton
             variant="outlined"
-            className={classes.noTransform}
             color="inherit"
           >
             <Link
@@ -87,12 +79,11 @@ const Tabs = () => {
             >
               View Feedback
             </Link>
-          </Button>
+          </StyledButton>
         )}
         {authContext.role === "dean" && (
-          <Button
+          <StyledButton
             variant="outlined"
-            className={classes.noTransform}
             color="inherit"
           >
             <Link
@@ -101,20 +92,19 @@ const Tabs = () => {
             >
               Resolve Complaints
             </Link>
-          </Button>
+          </StyledButton>
         )}
 
-        <Button
+        <StyledButton
           key="Home"
           variant="outlined"
-          className={classes.noTransform}
           color="inherit"
           style={{ marginLeft: "8px" }}
         >
           <Link to="/home" style={{ textDecoration: "none", color: "inherit" }}>
             Home
           </Link>
-        </Button>
+        </StyledButton>
       </Stack>
     </Box>
   );

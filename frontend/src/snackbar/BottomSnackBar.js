@@ -1,11 +1,7 @@
-import React, {useState, forwardRef} from "react";
+import React, { useState } from "react";
 import Stack from "@mui/material/Stack";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-
-const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const BottomSnackBar = (props) => {
   const [open, setOpen] = useState(true);

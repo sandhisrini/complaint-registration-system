@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles/index.css';
-import { BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import {
   ApolloClient,
   InMemoryCache,
@@ -23,13 +23,13 @@ const errorLink = onError(({ graphqlErrors, networkError }) => {
   }
 
   if (networkError) {
-    console.log('network errors = ',networkError)
+    console.log('network errors = ', networkError)
   }
 });
 
 const link = from([
   errorLink,
-  new HttpLink({ uri: "http://localhost:5001/graphql",  credentials: 'include'}),
+  new HttpLink({ uri: "http://localhost:5001/graphql", credentials: 'include' }),
 ]);
 
 const authLink = setContext((_, { headers }) => {
@@ -47,15 +47,15 @@ const client = new ApolloClient({
   link: authLink.concat(link)
 });
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ApolloProvider client={client}>
-         <App />
-      </ApolloProvider>  
+        <App />
+      </ApolloProvider>
     </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 
 

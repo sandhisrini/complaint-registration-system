@@ -12,6 +12,7 @@ import { useApolloClient } from "@apollo/client";
 import { LIST_COMMENTS } from "../../gql/queries/COMMENT";
 import CommentDialog from "./CommentDialog";
 import FeedbackComplaintDialog from "./FeedbackComplaintDialog";
+import ViewFeedback from "./ViewFeedback";
 
 
 const FeedbackComplaints = () => {
@@ -26,7 +27,9 @@ const FeedbackComplaints = () => {
   const [hardloading, setHardLoading] = useState(false)
   const navigate = useNavigate();
   const [commentdialogOpen, setCommentDialog] = useState(false);
-  const [commentsData,setCommentData] = useState([])
+  const [commentsData, setCommentData] = useState([])
+  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
+  const [selectedComplaintForFeedback, setSelectedComplaintForFeedback] = useState(null);
 
 
   const handleViewDetails = (complaint) => {
@@ -39,8 +42,8 @@ const FeedbackComplaints = () => {
   };
   const status = 'Resolved';
   const userId = authContext.userId
-  const { loading, error, data } = useQuery(LIST_COMPLAINTS_FEW, {
-    variables: { status, userId  },
+  const { loading, error, data, refetch } = useQuery(LIST_COMPLAINTS_FEW, {
+    variables: { status, userId },
   });
 
   if (error) {
@@ -153,7 +156,19 @@ const FeedbackComplaints = () => {
     }
   };
 
-  const feedbackHandlerFunction = () => {};
+  const feedbackHandlerFunction = (complaintId) => {
+    setSelectedComplaintForFeedback(complaintId);
+    setFeedbackDialogOpen(true);
+  };
+
+  const handleFeedbackDialogClose = () => {
+    setFeedbackDialogOpen(false);
+    setSelectedComplaintForFeedback(null);
+  };
+
+  const handleFeedbackSubmit = () => {
+    refetch();
+  };
 
   return (
     <React.Fragment>
@@ -184,7 +199,7 @@ const FeedbackComplaints = () => {
         <Container maxWidth="lg" style={{ marginTop: "50px" }}>
           <Grid container spacing={3}>
             {complaintsData.map((complaint) => (
-              <Grid item key={complaint.id} xs={12} sm={6} md={4}>
+              <Grid item key={complaint._id} xs={12} sm={6} md={4}>
                 <FeedbackComplaintCard
                   complaint={complaint}
                   viewHandler={viewHandler}
@@ -202,12 +217,18 @@ const FeedbackComplaints = () => {
         listCommentHandler={listCommentsHanlderFunction}
       />
       <CommentDialog
-            open={commentdialogOpen}
+        open={commentdialogOpen}
         comments={commentsData}
-        closeHandler = {commentsCloseHandler}
-          />
+        closeHandler={commentsCloseHandler}
+      />
+      <ViewFeedback
+        open={feedbackDialogOpen}
+        handleClose={handleFeedbackDialogClose}
+        complaintId={selectedComplaintForFeedback}
+        onFeedbackSubmit={handleFeedbackSubmit}
+      />
     </React.Fragment>
   );
 };
- 
+
 export default FeedbackComplaints;

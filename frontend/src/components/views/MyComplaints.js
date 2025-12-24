@@ -20,7 +20,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { AuthContext } from "../../App";
 import { VIEW_COMPLAINT } from "../../gql/queries/COMPLAINT";
 import { useApolloClient } from "@apollo/client";
-import {  LIST_COMMENTS } from "../../gql/queries/COMMENT";
+import { LIST_COMMENTS } from "../../gql/queries/COMMENT";
 
 const MyComplaints = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,7 +33,7 @@ const MyComplaints = () => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(false)
   const [commentdialogOpen, setCommentDialog] = useState(false);
-  const [commentsData,setCommentData] = useState([])
+  const [commentsData, setCommentData] = useState([])
 
   const handleViewDetails = (complaint) => {
     setSelectedComplaint(complaint);
@@ -51,6 +51,12 @@ const MyComplaints = () => {
   useEffect(() => {
     setBackDrop(loading);
   }, [loading]);
+
+  useEffect(() => {
+    if (authContext.userId) {
+      handleFetchButtonClick();
+    }
+  }, [authContext.userId]);
 
   const viewHandler = async (id) => {
     setLoading(true)
@@ -88,7 +94,7 @@ const MyComplaints = () => {
     }
   };
 
-  const [complaintStatus, setComplaintStatus] = React.useState("");
+  const [complaintStatus, setComplaintStatus] = React.useState("Active");
 
   const handleComplaintStatusChange = (event) => {
     setComplaintStatus(event.target.value);
@@ -221,42 +227,42 @@ const MyComplaints = () => {
         </Box>
       </Container>
       {complaintsData.length === 0 ? (
-      <Container
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "60vh",
-      }}
-    >
-      <Typography variant="h4" gutterBottom>
-        No complaints to show
-      </Typography>
-    </Container>
-      ): (
-        <Container maxWidth = "lg" style = {{ marginTop: "40px" }}>
-      <Grid container spacing={3}>
-        {complaintsData.map((complaint) => (
-          <Grid item key={complaint.id} xs={12} sm={6} md={4}>
-            <ComplaintCard complaint={complaint} viewHandler={viewHandler} />
+        <Container
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "60vh",
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            No complaints to show
+          </Typography>
+        </Container>
+      ) : (
+        <Container maxWidth="lg" style={{ marginTop: "40px" }}>
+          <Grid container spacing={3}>
+            {complaintsData.map((complaint) => (
+              <Grid item key={complaint.id} xs={12} sm={6} md={4}>
+                <ComplaintCard complaint={complaint} viewHandler={viewHandler} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-        
-    </Container>
-  )
-}
+
+        </Container>
+      )
+      }
       <MyComplaintDialog
-          open={dialogOpen}
-          handleClose={handleDialogClose}
+        open={dialogOpen}
+        handleClose={handleDialogClose}
         complaint={selectedComplaint}
         listCommentHandler={listCommentsHanlderFunction}
       />
       <CommentDialog
-            open={commentdialogOpen}
+        open={commentdialogOpen}
         comments={commentsData}
-        closeHandler = {commentsCloseHandler}
-          />
+        closeHandler={commentsCloseHandler}
+      />
     </React.Fragment>
   );
 };

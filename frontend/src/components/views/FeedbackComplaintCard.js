@@ -28,7 +28,6 @@ export const FeedbackComplaintCard = ({ complaint, viewHandler, feedbackHandler 
         <Grid
           container
           alignItems="center"
-          xs={10}
           style={{ marginTop: "15px" }}
         >
           <Grid item>

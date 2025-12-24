@@ -16,14 +16,13 @@ const feedbackSchema = new mongoose.Schema({
     default: null
   },
   complaint: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Complaint'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Complaint'
   },
   feedbacker: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-}
-
+  }
 });
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);

@@ -36,18 +36,19 @@ app.use(
       rootValue: graphQlResolvers,
       graphiql: true,
       formatError: (err) => {
-        console.log(err)
+        console.log('GraphQL Error:', err.message, err)
         const error = getErrorCode(err.message)
         if (error.message === errorTypes.DEFAULT.message) {
           error['detailedError'] = err
         }
-        res.status(error.statusCode);
+        // GraphQL errors should always return 200 with errors in the response body
+        // Don't set response status here
         return { error, message: error.message };
       }
     })(req, res, next);
   });
 
-const MONGO_URI = 'mongodb+srv://' + `${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}` + '@complaintregistrationsy.x8cpmwr.mongodb.net/' + `${process.env.MONGO_DB}` + '?retryWrites=true&w=majority';
+const MONGO_URI = 'mongodb://localhost:27017/' + `${process.env.MONGO_DB}`;
 //mongodb+srv://sanjana_54:<password>@complaintregistrationsy.x8cpmwr.mongodb.net/
 const MONGO_OPTIONS = {
   useNewUrlParser: true,

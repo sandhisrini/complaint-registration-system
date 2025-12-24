@@ -6,7 +6,7 @@ import CommentDialog from "./CommentDialog";
 import { useQuery } from "@apollo/client";
 import { LIST_COMPLAINTS_FEW } from "../../gql/queries/COMPLAINT";
 import SnackBar from "../../snackbar/SnackBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { AuthContext } from "../../App";
@@ -30,9 +30,10 @@ const AllComplaints = () => {
   const [bottomSeverity, setBottomSnackSeverity] = useState("");
   const [bottomSnackMessage, setBottomSnackMessage] = useState("");
   const [commentdialogOpen, setCommentDialog] = useState(false);
-  const [commentsData,setCommentData] = useState([])
+  const [commentsData, setCommentData] = useState([])
   const client = useApolloClient();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleViewDetails = (complaint) => {
     setSelectedComplaint(complaint);
@@ -262,31 +263,42 @@ const AllComplaints = () => {
       ) : (
         <Container maxWidth="lg" style={{ marginTop: "50px" }}>
           <Grid container spacing={3}>
-            {complaintsData.map((complaint) => (
-              <Grid item key={complaint.id} xs={12} sm={6} md={4}>
-                <ComplaintCard
-                  complaint={complaint}
-                  viewHandler={viewHandler}
-                />
-              </Grid>
-            ))}
+            {(() => {
+              const params = new URLSearchParams(location.search);
+              const q = params.get("search") || "";
+              const filtered = q
+                ? complaintsData.filter((c) =>
+                  c.complaint_category
+                    .toLowerCase()
+                    .includes(q.toLowerCase())
+                )
+                : complaintsData;
+              return filtered.map((complaint) => (
+                <Grid item key={complaint._id} xs={12} sm={6} md={4}>
+                  <ComplaintCard
+                    complaint={complaint}
+                    viewHandler={viewHandler}
+                  />
+                </Grid>
+              ));
+            })()}
           </Grid>
         </Container>
       )}
       <ComplaintDialog
-            open={dialogOpen}
-            handleClose={handleDialogClose}
-            complaint={selectedComplaint}
-            upvoteHandlerFunction={upVoteHandler}
-            loggedUserId={authContext.userId}
-            commentHandler={commentHandlerFunction}
-            listCommentHandler={listCommentsHanlderFunction}
+        open={dialogOpen}
+        handleClose={handleDialogClose}
+        complaint={selectedComplaint}
+        upvoteHandlerFunction={upVoteHandler}
+        loggedUserId={authContext.userId}
+        commentHandler={commentHandlerFunction}
+        listCommentHandler={listCommentsHanlderFunction}
       />
       <CommentDialog
-            open={commentdialogOpen}
+        open={commentdialogOpen}
         comments={commentsData}
-        closeHandler = {commentsCloseHandler}
-          />
+        closeHandler={commentsCloseHandler}
+      />
     </React.Fragment>
   );
 };

@@ -45,8 +45,7 @@ export default function SignUpAuthPage() {
       email: data.get("email"),
       password: data.get("password"),
       role: role,
-    };
-    if (userInput.email.split('@')[1] === 'cbit.org.in') {
+    }; if (userInput.email.split('@')[1] === 'gmail.com') {
       try {
         await client.mutate({
           mutation: SIGNUP,
@@ -66,7 +65,7 @@ export default function SignUpAuthPage() {
         setSnackSeverity('error');
       }
     } else {
-      alert('Email is not valid. Please enter your mail@cbit.org.in');
+      alert('Email is not valid. Please enter your mail@gmail.com');
     }
 
   };
@@ -120,7 +119,7 @@ export default function SignUpAuthPage() {
                 autoComplete="identification_num"
                 inputProps={{
                   maxLength: 12,
-                  minLength: 12
+                  minLength: role === "dean" ? 1 : 4
                 }}
                 autoFocus
               />
@@ -133,7 +132,7 @@ export default function SignUpAuthPage() {
                 name="email"
                 autoComplete="email"
                 inputProps={{
-                  pattern: '^[a-zA-Z0-9._%+-]+@cbit\\.org\\.in$',
+                  pattern: '^[a-zA-Z0-9._%+\\-]+@gmail\\.com$',
                 }}
                 autoFocus
               />
@@ -184,14 +183,14 @@ export default function SignUpAuthPage() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link variant="body2">
-                    <RouterLink
-                      to="/login"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      {"Already have an account? Sign In"}
-                    </RouterLink>
-                  </Link>
+                  <RouterLink
+                    to="/login"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography variant="body2">
+                      Already have an account? Sign In
+                    </Typography>
+                  </RouterLink>
                 </Grid>
               </Grid>
             </Box>
